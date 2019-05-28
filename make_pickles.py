@@ -5,10 +5,10 @@ from tqdm import tqdm
 import random
 import pickle
 
-def create_data(dir, categories, imageSize):
+def create_data(dir, categories, imageSize, className):
     data = []
     for category in categories:
-        path = os.path.join(dir, category)
+        path = os.path.join(dir + "\\" + className, category)
         classNum = categories.index(category)
 
         for image in tqdm(os.listdir(path)):
@@ -23,7 +23,7 @@ def create_data(dir, categories, imageSize):
     return data
 
 def make_pickle(dir, categories, imageSize, className):
-    data = create_data(dir, categories, imageSize)
+    data = create_data(dir, categories, imageSize, className)
     random.shuffle(data)
     xData, yData = process_data(data, imageSize)
     pickleOut = open(dir + "\\" + className + "\\pickles\\" + "x" + className + ".pickle", "wb")
@@ -46,10 +46,10 @@ def process_data(data, imageSize):
 
 genderCategories = ["male", "female"]
 hairColorCategories = ["blonde", "dark"]
-skinColorCategories = ["bright", "dark"]
+ageCategories = ["adult", "child"]
 
 dir = "C:\\Users\\singe\\Documents\\Human Classifier"
 imageSize = 200
 make_pickle(dir, genderCategories, imageSize, "gender")
 make_pickle(dir, hairColorCategories, imageSize, "hair_color")
-make_pickle(dir, skinColorCategories, imageSize, "age")
+make_pickle(dir, ageCategories, imageSize, "age")
