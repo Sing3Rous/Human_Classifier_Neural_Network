@@ -28,11 +28,10 @@ def add_output_layer(model):
 
 def load_data(datadir, className):
     pickles = []
-    pickleIn = open(datadir + "pickles\\" + "x" + className, "rb")
-    pickle.load(pickleIn)
-    pickles.append(pickleIn)
-    pickleIn = open(datadir + "pickles\\" + "y" + className, "rb")
-    pickle.load(pickleIn)
+    pickleIn = open(datadir + "\\" + className + "\\" + "pickles\\" + "x" + className + ".pickle", "rb")
+    pickles.append(pickle.load(pickleIn))
+    pickleIn = open(datadir + "\\" + className + "\\" + "pickles\\" + "y" + className + ".pickle", "rb")
+    pickles.append(pickle.load(pickleIn))
     return pickles
 
 def save_model(model, datadir, className):
@@ -140,19 +139,19 @@ genderLogName = "{}-conv-{}-filters-{}-batches-{}".format(genderCNNArchitecture[
                                                     genderCNNArchitecture["filters"],
                                                     genderCNNparameters["batchSize"],
                                                     int(time.time()))
-genderBoard = TensorBoard(log_dir='C:\\Users\\singe\\Desktop\\training\\logs\\{}'.format(genderLogName))
+genderBoard = TensorBoard(log_dir='C:\\Users\\singe\\Documents\\Human Classifier\\gender\\logs\\{}'.format(genderLogName))
 
 ageLogName = "{}-conv-{}-filters-{}-batches-{}".format(ageCNNArchitecture["numOfConvLayers"],
                                                     ageCNNArchitecture["filters"],
                                                     ageCNNparameters["batchSize"],
                                                     int(time.time()))
-ageBoard = TensorBoard(log_dir='C:\\Users\\singe\\Desktop\\training\\logs\\{}'.format(ageLogName))
+ageBoard = TensorBoard(log_dir='C:\\Users\\singe\\Documents\\Human Classifier\\age\\logs\\{}'.format(ageLogName))
 
 hairColorLogName = "{}-conv-{}-filters-{}-batches-{}".format(hairColorCNNArchitecture["numOfConvLayers"],
                                                     hairColorCNNArchitecture["filters"],
                                                     hairColorCNNparameters["batchSize"],
                                                     int(time.time()))
-hairColorBoard = TensorBoard(log_dir='C:\\Users\\singe\\Desktop\\training\\logs\\{}'.format(hairColorLogName))
+hairColorBoard = TensorBoard(log_dir='C:\\Users\\singe\\Documents\\Human Classifier\\hair_color\\logs\\{}'.format(hairColorLogName))
 ########################################################################################################################
 
 #build & train models
