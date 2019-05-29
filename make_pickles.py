@@ -5,10 +5,14 @@ from tqdm import tqdm
 import random
 import pickle
 
-def create_data(dir, categories, imageSize, className):
+def create_data(dir, categories, imageSize, className, isTest):
     data = []
     for category in categories:
-        path = os.path.join(dir + "\\" + className, category)
+        if (isTest):
+            path = os.path.join(dir + "\\" + className + "\\" + "validate", category)
+        else:
+            path = os.path.join(dir + "\\" + className, category)
+
         classNum = categories.index(category)
 
         for image in tqdm(os.listdir(path)):
@@ -22,14 +26,20 @@ def create_data(dir, categories, imageSize, className):
 
     return data
 
-def make_pickle(dir, categories, imageSize, className):
-    data = create_data(dir, categories, imageSize, className)
+def make_pickle(dir, categories, imageSize, className, isTest):
+    data = create_data(dir, categories, imageSize, className, isTest)
     random.shuffle(data)
     xData, yData = process_data(data, imageSize)
-    pickleOut = open(dir + "\\" + className + "\\pickles\\" + "x" + className + ".pickle", "wb")
+    if (isTest):
+        pickleOut = open(dir + "\\" + className + "\\pickles\\" + "x" + className + "Validate" + ".pickle", "wb")
+    else:
+        pickleOut = open(dir + "\\" + className + "\\pickles\\" + "x" + className + ".pickle", "wb")
     pickle.dump(xData, pickleOut)
     pickleOut.close()
-    pickleOut = open(dir + "\\" + className + "\\pickles\\" + "y" + className + ".pickle", "wb")
+    if (isTest):
+        pickleOut = open(dir + "\\" + className + "\\pickles\\" + "y" + className + "Validate" + ".pickle", "wb")
+    else:
+        pickleOut = open(dir + "\\" + className + "\\pickles\\" + "y" + className + ".pickle", "wb")
     pickle.dump(yData, pickleOut)
     pickleOut.close()
 
@@ -50,6 +60,9 @@ ageCategories = ["adult", "child"]
 
 dir = "C:\\Users\\singe\\Documents\\Human Classifier"
 imageSize = 200
-make_pickle(dir, genderCategories, imageSize, "gender")
-make_pickle(dir, hairColorCategories, imageSize, "hair_color")
-make_pickle(dir, ageCategories, imageSize, "age")
+make_pickle(dir, genderCategories, imageSize, "gender", False)
+make_pickle(dir, hairColorCategories, imageSize, "hair_color", False)
+make_pickle(dir, ageCategories, imageSize, "age", False)
+make_pickle(dir, genderCategories, imageSize, "gender", True)
+make_pickle(dir, hairColorCategories, imageSize, "hair_color", True)
+make_pickle(dir, ageCategories, imageSize, "age", True)
