@@ -5,13 +5,30 @@ from tqdm import tqdm
 import random
 import pickle
 
+def main():
+    genderCategories = ["male", "female"]
+    hairColorCategories = ["blonde", "dark"]
+    ageCategories = ["adult", "child"]
+
+    dir = "C:\\Users\\singe\\Documents\\Human Classifier"
+
+    imageSize = 200
+    make_pickle(dir, genderCategories, imageSize, "gender", False)
+    make_pickle(dir, hairColorCategories, imageSize, "hair_color", False)
+    make_pickle(dir, ageCategories, imageSize, "age", False)
+    make_pickle(dir, genderCategories, imageSize, "gender", True)
+    make_pickle(dir, hairColorCategories, imageSize, "hair_color", True)
+    make_pickle(dir, ageCategories, imageSize, "age", True)
+
+#takes each image in folder and makes an data array of every image
+#returns an array of arrays of data of images
 def create_data(dir, categories, imageSize, className, isTest):
     data = []
     for category in categories:
         if (isTest):
-            path = os.path.join(dir + "\\" + className + "\\" + "validate", category)
+            path = os.path.join(dir, "categories", className, "validate", category)
         else:
-            path = os.path.join(dir + "\\" + className, category)
+            path = os.path.join(dir, "categories", className, category)
 
         classNum = categories.index(category)
 
@@ -26,23 +43,26 @@ def create_data(dir, categories, imageSize, className, isTest):
 
     return data
 
-def make_pickle(dir, categories, imageSize, className, isTest):
-    data = create_data(dir, categories, imageSize, className, isTest)
+#makes pickle of images in folder
+def make_pickle(dir, categories, imageSize, className, isValidate):
+    data = create_data(dir, categories, imageSize, className, isValidate)
     random.shuffle(data)
     xData, yData = process_data(data, imageSize)
-    if (isTest):
-        pickleOut = open(dir + "\\" + className + "\\pickles\\" + "x" + className + "Validate" + ".pickle", "wb")
+    path = os.path.join(dir, "categories", className, "pickles")
+    if (isValidate):
+        pickleOut = open(os.path.join(path, "x" + className + "Validate" + ".pickle"), "wb")
     else:
-        pickleOut = open(dir + "\\" + className + "\\pickles\\" + "x" + className + ".pickle", "wb")
+        pickleOut = open(os.path.join(path, "x" + className + ".pickle"), "wb")
     pickle.dump(xData, pickleOut)
     pickleOut.close()
-    if (isTest):
-        pickleOut = open(dir + "\\" + className + "\\pickles\\" + "y" + className + "Validate" + ".pickle", "wb")
+    if (isValidate):
+        pickleOut = open(os.path.join(path, "y" + className + "Validate" + ".pickle"), "wb")
     else:
-        pickleOut = open(dir + "\\" + className + "\\pickles\\" + "y" + className + ".pickle", "wb")
+        pickleOut = open(os.path.join(path, "y" + className + ".pickle"), "wb")
     pickle.dump(yData, pickleOut)
     pickleOut.close()
 
+#normalize data of images
 def process_data(data, imageSize):
     X = []
     y = []
@@ -54,15 +74,5 @@ def process_data(data, imageSize):
     X = X / 255.0
     return X, y
 
-genderCategories = ["male", "female"]
-hairColorCategories = ["blonde", "dark"]
-ageCategories = ["adult", "child"]
-
-dir = "C:\\Users\\singe\\Documents\\Human Classifier"
-imageSize = 200
-make_pickle(dir, genderCategories, imageSize, "gender", False)
-make_pickle(dir, hairColorCategories, imageSize, "hair_color", False)
-make_pickle(dir, ageCategories, imageSize, "age", False)
-make_pickle(dir, genderCategories, imageSize, "gender", True)
-make_pickle(dir, hairColorCategories, imageSize, "hair_color", True)
-make_pickle(dir, ageCategories, imageSize, "age", True)
+if __name__ == "__main__":
+    main()
