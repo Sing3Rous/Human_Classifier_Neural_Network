@@ -50,12 +50,12 @@ def save_model(model, datadir, className, CNNArchitecture, CNNparameters):
                        + str(CNNArchitecture["numOfConvLayers"]) + "]_" + "filters[" + str(CNNArchitecture["filters"])
                        + "]_" + "batches[" + str(CNNparameters["batchSize"]) + "]" + ".h5")
 
-def load_model(datadir, modelName):
-    jsonFile = open(datadir + "\\models\\" + modelName + ".json", 'r')
+def load_model(modelName, datadir, className):
+    jsonFile = open(datadir + "\\" + className + "\\models\\" + modelName + ".json", 'r')
     modelJson = jsonFile.read()
     jsonFile.close()
     model = model_from_json(modelJson)
-    model.load_weights(datadir + "\\models\\" + modelName + ".h5")
+    model.load_weights(datadir + "\\" + className + "\\models\\" + modelName + ".h5")
     return model
 
 def build_model(CNNArchitecture, trainData):
@@ -169,17 +169,17 @@ hairColorBoard = TensorBoard(log_dir='C:\\Users\\singe\\Documents\\Human Classif
 
 #build & train models
 ########################################################################################################################
-genderModel = build_model(genderCNNArchitecture, genderTrain)
-train_model(genderModel, genderCNNparameters, genderTrain, genderTrainValidate, genderBoard)
-save_model(genderModel, dir, genderClassName, genderCNNArchitecture, genderCNNparameters)
-
-ageModel = build_model(ageCNNArchitecture, ageTrain)
-train_model(ageModel, ageCNNparameters, ageTrain, ageTrainValidate, ageBoard)
-save_model(ageModel, dir, ageClassName, ageCNNArchitecture, ageCNNparameters)
-
-hairColorModel = build_model(hairColorCNNArchitecture, hairColorTrain)
-train_model(hairColorModel, hairColorCNNparameters, hairColorTrain, hairColorTrainValidate, hairColorBoard)
-save_model(hairColorModel, dir, hairColorClassName, hairColorCNNArchitecture, hairColorCNNparameters)
+# genderModel = build_model(genderCNNArchitecture, genderTrain)
+# train_model(genderModel, genderCNNparameters, genderTrain, genderTrainValidate, genderBoard)
+# save_model(genderModel, dir, genderClassName, genderCNNArchitecture, genderCNNparameters)
+#
+# ageModel = build_model(ageCNNArchitecture, ageTrain)
+# train_model(ageModel, ageCNNparameters, ageTrain, ageTrainValidate, ageBoard)
+# save_model(ageModel, dir, ageClassName, ageCNNArchitecture, ageCNNparameters)
+#
+# hairColorModel = build_model(hairColorCNNArchitecture, hairColorTrain)
+# train_model(hairColorModel, hairColorCNNparameters, hairColorTrain, hairColorTrainValidate, hairColorBoard)
+# save_model(hairColorModel, dir, hairColorClassName, hairColorCNNArchitecture, hairColorCNNparameters)
 ########################################################################################################################
 
 #research architecture & parameters of cnn
