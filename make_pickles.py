@@ -6,61 +6,54 @@ import random
 import pickle
 
 def main():
-    genderCategories = ["male", "female"]
-    hairColorCategories = ["blonde", "dark"]
-    ageCategories = ["adult", "child"]
-
     dir = "C:\\Users\\singe\\Documents\\Human Classifier"
-
     imageSize = 200
-    make_pickle(dir, genderCategories, imageSize, "gender", False)
-    make_pickle(dir, hairColorCategories, imageSize, "hair_color", False)
-    make_pickle(dir, ageCategories, imageSize, "age", False)
-    make_pickle(dir, genderCategories, imageSize, "gender", True)
-    make_pickle(dir, hairColorCategories, imageSize, "hair_color", True)
-    make_pickle(dir, ageCategories, imageSize, "age", True)
+
+    make_pickles(dir, imageSize)
 
 #takes each image in folder and makes an data array of every image
 #returns an array of arrays of data of images
-def create_data(dir, categories, imageSize, className, isTest):
+def create_data(dir, categories, imageSize, isValidate=False):
     data = []
     for category in categories:
-        if (isTest):
-            path = os.path.join(dir, "categories", className, "validate", category)
+        path = dir
+        if (isValidate):
+            path = os.path.join(dir, "validate", category)
         else:
-            path = os.path.join(dir, "categories", className, category)
+            path = os.path.join(dir, "train", category)
 
         classNum = categories.index(category)
-
         for image in tqdm(os.listdir(path)):
-            try:
-                imageArray = cv2.imread(os.path.join(path, image), cv2.IMREAD_COLOR)
-                normalizedImageArray = cv2.resize(imageArray, (imageSize, imageSize))
-                data.append([normalizedImageArray, classNum])
-
-            except Exception:
-                pass
+            imageArray = cv2.imread(os.path.join(path, image), cv2.IMREAD_COLOR)
+            normalizedImageArray = cv2.resize(imageArray, (imageSize, imageSize))
+            data.append([normalizedImageArray, classNum])
 
     return data
 
 #makes pickle of images in folder
-def make_pickle(dir, categories, imageSize, className, isValidate):
-    data = create_data(dir, categories, imageSize, className, isValidate)
-    random.shuffle(data)
-    xData, yData = process_data(data, imageSize)
-    path = os.path.join(dir, "categories", className, "pickles")
-    if (isValidate):
-        pickleOut = open(os.path.join(path, "x" + className + "Validate" + ".pickle"), "wb")
-    else:
-        pickleOut = open(os.path.join(path, "x" + className + ".pickle"), "wb")
-    pickle.dump(xData, pickleOut)
-    pickleOut.close()
-    if (isValidate):
-        pickleOut = open(os.path.join(path, "y" + className + "Validate" + ".pickle"), "wb")
-    else:
-        pickleOut = open(os.path.join(path, "y" + className + ".pickle"), "wb")
-    pickle.dump(yData, pickleOut)
-    pickleOut.close()
+def make_pickles(dir, imageSize):
+    path = os.path.join(dir, "categories")
+
+    for className in os.listdir(path):
+        path = os.path.join(dir, "categories")
+        categories = os.listdir(os.path.join(path, className, "train"))
+
+        for isValidate in [False, True]:
+            path = os.path.join(dir, "categories")
+            data = create_data(os.path.join(path, className), categories, imageSize, isValidate)
+            random.shuffle(data)
+            xData, yData = process_data(data, imageSize)
+            path = os.path.join(path, className, "pickles")
+            if (isValidate):
+                pickleOutX = open(os.path.join(path, "x" + className + "Validate" + ".pickle"), "wb")
+                pickleOutY = open(os.path.join(path, "y" + className + "Validate" + ".pickle"), "wb")
+            else:
+                pickleOutX = open(os.path.join(path, "x" + className + ".pickle"), "wb")
+                pickleOutY = open(os.path.join(path, "y" + className + ".pickle"), "wb")
+            pickle.dump(xData, pickleOutX)
+            pickle.dump(yData, pickleOutY)
+            pickleOutX.close()
+            pickleOutY.close()
 
 #normalize data of images
 def process_data(data, imageSize):
