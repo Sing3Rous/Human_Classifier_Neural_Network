@@ -1,26 +1,14 @@
 import cv2
 import os
+from pathlib import Path
 from tqdm import tqdm
-from convolutional_neural_network import load_model
+from util import load_model
 
 def main():
     dir = "C:\\Users\\singe\\Documents\\Human Classifier"
 
-    categories = []
-    genderCategories = ["male", "female"]
-    categories.append(genderCategories)
-    ageCategories = ["adult", "child"]
-    categories.append(ageCategories)
-    hairColorCategories = ["blonde", "dark"]
-    categories.append(hairColorCategories)
-
-    models = []
-    genderModel = load_model("gender_conv[3]_filters[32]_batches[8]", dir, "gender")
-    models.append(genderModel)
-    ageModel = load_model("age_conv[3]_filters[16]_batches[16]", dir, "age")
-    models.append(ageModel)
-    hairColorModel = load_model("hair_color_conv[3]_filters[32]_batches[32]", dir, "hair_color")
-    models.append(hairColorModel)
+    categories = get_categories(dir)
+    models = get_models(dir)
 
     rename_each_image(dir, isInit=True)
     rename_by_prediction(dir, models, categories)
@@ -29,7 +17,7 @@ def main():
 #takes each image in folder and makes an data array of every image
 #returns an array of arrays of data of images
 def make_image_data(dir, imageSize):
-    path = os.path.join(dir, "validation")
+    path = os.path.join(dir, "validation", "images")
     data = []
     for image in tqdm(os.listdir(path)):
         imageArray = cv2.imread(os.path.join(path, image), cv2.IMREAD_COLOR)
@@ -44,7 +32,7 @@ def make_image_data(dir, imageSize):
 #3) else: renames to %name%_%additional name%, where additional name is
 #a name in a list of strings
 def rename_each_image(dir, additionalNames=[], isInit=False, isLast=False):
-    path = os.path.join(dir, "validation")
+    path = os.path.join(dir, "validation", "images")
     num = 1
     if (isInit):
         for image in tqdm(os.listdir(path)):
@@ -71,6 +59,24 @@ def rename_by_prediction(dir, models, categories):
             predictions.append(categories[num][int(prediction[0][0])])
         rename_each_image(dir, predictions)
         num += 1
+
+def get_categories(dir):
+    categories = []
+    path = os.path.join(dir, "categories")
+    for category in os.listdir(path):
+        classCategories = os.listdir(os.path.join(path, category, "train"))
+        categories.append(classCategories)
+
+    return categories
+
+def get_models(dir):
+    path = os.path.join(dir, "validation", "models")
+    models = []
+    for modelName in os.listdir(path):
+        model = load_model(modelName, dir)
+        models.append(model)
+
+    return models
 
 if __name__ == "__main__":
     main()
