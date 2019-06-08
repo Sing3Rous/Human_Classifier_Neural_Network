@@ -24,7 +24,7 @@ def main():
                                                                      CNNParametersList[i]["batchSize"],
                                                                      int(time.time()))
         board = TensorBoard(
-            log_dir=(os.path.join(dir, "categories", CNNParametersList[i]["className"], "logs") + "{}").format(logName))
+            log_dir=(os.path.join(dir, "categories", CNNParametersList[i]["className"], "logs", "{}")).format(logName))
         boards.append(board)
 
     # build & train models
