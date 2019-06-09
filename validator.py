@@ -7,11 +7,11 @@ from util import load_model
 def main():
     dir = "C:\\Users\\singe\\Documents\\Human Classifier"
 
-    categories = get_categories(dir)
+    classes = get_classes(dir)
     models = get_models(dir)
 
     rename_each_image(dir, isInit=True)
-    rename_by_prediction(dir, models, categories)
+    rename_by_prediction(dir, models, classes)
     rename_each_image(dir, isLast=True)
 
 #takes each image in folder and makes an data array of every image
@@ -29,7 +29,7 @@ def make_image_data(dir, imageSize):
 #takes each image in folder and renames it:
 #1) if its an initialization: renames to 1_, 2_, 3_, ..., n_
 #2) if its last iteration: renames to %name%.jpg
-#3) else: renames to %name%_%additional name%, where additional name is
+#3) else: renames to %name%%additional name%_, where additional name is
 #a name in a list of strings
 def rename_each_image(dir, additionalNames=[], isInit=False, isLast=False):
     path = os.path.join(dir, "validation", "images")
@@ -46,7 +46,7 @@ def rename_each_image(dir, additionalNames=[], isInit=False, isLast=False):
             os.rename(os.path.join(path, image), os.path.join(path, image + additionalNames[num - 1] + "_"))
             num += 1
 
-#apply prediction of each model on each image in folder
+#applies prediction of each model on each image in folder
 #and renames it
 def rename_by_prediction(dir, models, categories):
     data = make_image_data(dir, 200)
@@ -60,18 +60,20 @@ def rename_by_prediction(dir, models, categories):
         rename_each_image(dir, predictions)
         num += 1
 
-def get_categories(dir):
-    categories = []
+#returns list of lists of classes of each category
+def get_classes(dir):
+    classes = []
     path = os.path.join(dir, "categories")
     for category in os.listdir(path):
-        classCategories = os.listdir(os.path.join(path, category, "train"))
-        categories.append(classCategories)
+        categoryClasses = os.listdir(os.path.join(path, category, "train"))
+        classes.append(categoryClasses)
 
-    return categories
+    return classes
 
+#returns list of all models in ../validation/models folder
 def get_models(dir):
-    path = os.path.join(dir, "validation", "models")
     models = []
+    path = os.path.join(dir, "validation", "models")
     for modelName in os.listdir(path):
         model = load_model(modelName, dir)
         models.append(model)
