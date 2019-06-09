@@ -1,9 +1,10 @@
 import os
 import pickle
 import json
+import datetime
 from tensorflow.keras.models import model_from_json
 
-#returns a pickle of images
+#returns list of train and list of validate pickles
 def load_data(dir):
     path = os.path.join(dir, "categories")
     data = []
@@ -37,6 +38,9 @@ def save_model(model, dir, CNNArchitecture, CNNparameters):
                 + "]_" + "filters[" + str(CNNArchitecture["filters"]) + "]_" + "batches[" + str(CNNparameters["batchSize"]) \
                 + "]"
     path = os.path.join(dir, "categories", CNNparameters["className"], "models", modelName)
+    if (os.path.exists(path)):
+        now = datetime.datetime.now()
+        path += "_("  + str(now.hour) + "_" + str(now.minute) + "_" + str(now.microsecond) + ")"
     os.mkdir(path)
     with open(os.path.join(path, modelName + ".json"), 'w') as jsonFile:
         jsonFile.write(modelJson)
@@ -54,6 +58,7 @@ def load_model(modelName, dir, className=""):
     model.load_weights(os.path.join(path, modelName + ".h5"))
     return model
 
+#returns list of all cnn architectures
 def load_cnn_architectures(dir):
     architectures = []
     path = os.path.join(dir, "categories")
@@ -64,6 +69,7 @@ def load_cnn_architectures(dir):
 
     return architectures
 
+#returns list of all cnn parameters
 def load_cnn_parameters_list(dir):
     parametersList = []
     path = os.path.join(dir, "categories")
