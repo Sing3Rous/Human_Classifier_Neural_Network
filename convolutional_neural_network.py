@@ -33,8 +33,6 @@ def main():
         train_model(model, CNNParametersList[i], data[i], validateData[i], boards[i])
         save_model(model, dir, CNNArchitectures[i], CNNParametersList[i])
 
-
-
 def add_convolutional_layers(numOfLayers, model, filters, kernelSize, poolSize):
     for i in range(numOfLayers):
         model.add(Conv2D(filters, (kernelSize, kernelSize)))
