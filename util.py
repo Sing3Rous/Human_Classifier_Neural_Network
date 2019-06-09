@@ -37,7 +37,10 @@ def save_model(model, dir, CNNArchitecture, CNNparameters):
     modelName = CNNparameters["className"] + "_conv[" + str(CNNArchitecture["numOfConvLayers"]) \
                 + "]_" + "filters[" + str(CNNArchitecture["filters"]) + "]_" + "batches[" + str(CNNparameters["batchSize"]) \
                 + "]"
-    path = os.path.join(dir, "categories", CNNparameters["className"], "models", modelName)
+    path = os.path.join(dir, "categories", CNNparameters["className"], "models")
+    if (not os.path.exists(path)):
+        os.mkdir(path)
+    path = os.path.join(path, modelName)
     if (os.path.exists(path)):
         now = datetime.datetime.now()
         path += "_("  + str(now.hour) + "_" + str(now.minute) + "_" + str(now.microsecond) + ")"

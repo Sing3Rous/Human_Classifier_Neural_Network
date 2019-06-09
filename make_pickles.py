@@ -34,22 +34,24 @@ def create_data(dir, categories, imageSize, isValidate=False):
 def make_pickles(dir, imageSize):
     path = os.path.join(dir, "categories")
 
-    for className in os.listdir(path):
+    for category in os.listdir(path):
         path = os.path.join(dir, "categories")
-        categories = os.listdir(os.path.join(path, className, "train"))
+        categories = os.listdir(os.path.join(path, category, "train"))
 
         for isValidate in [False, True]:
             path = os.path.join(dir, "categories")
-            data = create_data(os.path.join(path, className), categories, imageSize, isValidate)
+            data = create_data(os.path.join(path, category), categories, imageSize, isValidate)
             random.shuffle(data)
             xData, yData = process_data(data, imageSize)
-            path = os.path.join(path, className, "pickles")
+            path = os.path.join(path, category, "pickles")
+            if (not os.path.exists(path)):
+                os.mkdir(path)
             if (isValidate):
-                pickleOutX = open(os.path.join(path, "x" + className + "Validate" + ".pickle"), "wb")
-                pickleOutY = open(os.path.join(path, "y" + className + "Validate" + ".pickle"), "wb")
+                pickleOutX = open(os.path.join(path, "x" + category + "Validate" + ".pickle"), "wb")
+                pickleOutY = open(os.path.join(path, "y" + category + "Validate" + ".pickle"), "wb")
             else:
-                pickleOutX = open(os.path.join(path, "x" + className + ".pickle"), "wb")
-                pickleOutY = open(os.path.join(path, "y" + className + ".pickle"), "wb")
+                pickleOutX = open(os.path.join(path, "x" + category + ".pickle"), "wb")
+                pickleOutY = open(os.path.join(path, "y" + category + ".pickle"), "wb")
             pickle.dump(xData, pickleOutX)
             pickle.dump(yData, pickleOutY)
             pickleOutX.close()
