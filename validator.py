@@ -1,6 +1,5 @@
 import cv2
 import os
-from pathlib import Path
 from tqdm import tqdm
 from util import load_model
 
