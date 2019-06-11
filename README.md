@@ -35,6 +35,6 @@ datetime
 
 #### Documents on _russian_:
 
-##### [Terms of reference](https://github.com/Sing3Rous/Human_Classifier_Neural_Network/blob/master/Terms%20Of%20Reference.pdf)
+##### [Terms of reference (obsolete)](https://github.com/Sing3Rous/Human_Classifier_Neural_Network/blob/master/Terms%20Of%20Reference.pdf)
 
 ##### [Research report (obsolete)](https://github.com/Sing3Rous/Human_Classifier_Neural_Network/blob/master/Research%20Report.pdf)
