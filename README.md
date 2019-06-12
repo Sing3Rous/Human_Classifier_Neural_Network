@@ -8,6 +8,8 @@
 
 ##### `validator.py` - script that uses prediction of some models (builded and trained by using `convolutional_neural_network.py`) and renames every image in folder by prediction (e.g. 10_male_adult_blonde).
 
+##### `utkface_dataset_parser.py` - script for parsing [UTKFace dataset](https://susanqq.github.io/UTKFace/) .
+
 #### Used libraries:
 ~~~~
 tensorflow
@@ -21,6 +23,7 @@ tqdm
 random
 json
 datetime
+shutil
 ~~~~
 
 #### For correct work you must install your directories structure following this scheme:
