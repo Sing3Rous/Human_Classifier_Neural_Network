@@ -7,7 +7,7 @@ import pickle
 
 def main():
     dir = "C:\\Users\\singe\\Documents\\Human Classifier"
-    imageSize = 200
+    imageSize = 100
 
     make_pickles(dir, imageSize)
 
@@ -52,8 +52,8 @@ def make_pickles(dir, imageSize):
             else:
                 pickleOutX = open(os.path.join(path, "x" + category + ".pickle"), "wb")
                 pickleOutY = open(os.path.join(path, "y" + category + ".pickle"), "wb")
-            pickle.dump(xData, pickleOutX)
-            pickle.dump(yData, pickleOutY)
+            pickle.dump(xData, pickleOutX, protocol=4)
+            pickle.dump(yData, pickleOutY, protocol=4)
             pickleOutX.close()
             pickleOutY.close()
 
