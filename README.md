@@ -8,6 +8,8 @@
 
 ##### `validator.py` - script that uses prediction of some models (builded and trained by using `convolutional_neural_network.py`) and renames every image in folder by prediction (e.g. 10_male_adult_blonde).
 
+##### `utkface_dataset_parser.py` - script for parsing [UTKFace dataset](https://susanqq.github.io/UTKFace/) .
+
 #### Used libraries:
 ~~~~
 tensorflow
@@ -21,6 +23,7 @@ tqdm
 random
 json
 datetime
+shutil
 ~~~~
 
 #### For correct work you must install your directories structure following this scheme:
@@ -35,6 +38,6 @@ datetime
 
 #### Documents on _russian_:
 
-##### [Terms of reference](https://github.com/Sing3Rous/Human_Classifier_Neural_Network/blob/master/Terms%20Of%20Reference.pdf)
+##### [Terms of reference (obsolete)](https://github.com/Sing3Rous/Human_Classifier_Neural_Network/blob/master/Terms%20Of%20Reference.pdf)
 
 ##### [Research report (obsolete)](https://github.com/Sing3Rous/Human_Classifier_Neural_Network/blob/master/Research%20Report.pdf)
