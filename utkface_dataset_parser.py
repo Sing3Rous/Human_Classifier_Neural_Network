@@ -78,7 +78,7 @@ def parse_by_age_group(dir, persons):
         os.mkdir(groupThreePath)
 
     imagesFullPath = [os.path.join(imagesPath, image) for image in os.listdir(imagesPath)]
-    for image, person in tqdm(zip(imagesFullPath, persons)):
+    for image, person in tqdm(zip(imagesFullPath, persons), total=len(persons)):
         ageGroup = person.get_age_group()
         if (ageGroup == 0):
             copy2(image, groupZeroPath)
@@ -102,7 +102,7 @@ def parse_by_gender(dir, persons):
         os.mkdir(femalePath)
 
     imagesFullPath = [os.path.join(imagesPath, image) for image in os.listdir(imagesPath)]
-    for image, person in tqdm(zip(imagesFullPath, persons)):
+    for image, person in tqdm(zip(imagesFullPath, persons), total=len(persons)):
         if (person.gender == 0):
             copy2(image, malePath)
         if (person.gender == 1):
@@ -130,7 +130,7 @@ def parse_by_race(dir, persons):
         os.mkdir(otherPath)
 
     imagesFullPath = [os.path.join(imagesPath, image) for image in os.listdir(imagesPath)]
-    for image, person in tqdm(zip(imagesFullPath, persons)):
+    for image, person in tqdm(zip(imagesFullPath, persons), total=len(persons)):
         if (person.race == 0):
             copy2(image, europidPath)
         if (person.race == 1):
