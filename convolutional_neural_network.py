@@ -1,9 +1,10 @@
 import time
 import os
-from tensorflow.keras.callbacks import TensorBoard
+from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
 from tensorflow.keras.layers import Conv2D, MaxPooling2D
+from tensorflow import lite
 from util import load_data
 from util import save_model
 from util import load_cnn_architectures
@@ -23,15 +24,24 @@ def main():
                                                                      CNNArchitectures[i]["filters"],
                                                                      CNNParametersList[i]["batchSize"],
                                                                      int(time.time()))
+
         board = TensorBoard(
             log_dir=(os.path.join(dir, "categories", CNNParametersList[i]["className"], "logs", "{}")).format(logName))
         boards.append(board)
 
     # build & train models
     for i in range(len(data)):
+        checkpointerDir = os.path.join("C:\\Users\\singe\\Documents\\Human Classifier\\models", CNNParametersList[i]["className"])
+        checkpointer = ModelCheckpoint(save_weights_only=False, filepath=checkpointerDir+".model",
+                                       verbose=1, save_best_only=True)
         model = build_model(CNNArchitectures[i], data[i])
-        train_model(model, CNNParametersList[i], data[i], validateData[i], boards[i])
-        save_model(model, dir, CNNArchitectures[i], CNNParametersList[i])
+        #train_model(model, CNNParametersList[i], data[i], validateData[i], boards[i])
+        train_model(model, CNNParametersList[i], data[i], validateData[i], checkpointer)
+        converter = lite.TFLiteConverter.from_keras_model_file(checkpointerDir+".model")
+        model = converter.convert()
+        file = open(checkpointerDir+".lite", 'wb')
+        file.write(model)
+        #save_model(model, dir, CNNArchitectures[i], CNNParametersList[i])
 
 def add_convolutional_layers(numOfLayers, model, filters, kernelSize, poolSize):
     for i in range(numOfLayers):
