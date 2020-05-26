@@ -1,6 +1,6 @@
 # Human Classifier
-### Convolutional neural network that classifies some of human characteristics by the image of his face.
-##### Number and nature of categories and classes of categories determines by you.
+### Convolutional neural network that classifies human characteristics by the image of its face.
+##### Count, nature and classes of categories determines by you.
 
 ##### `make_pickles.py` - script that makes pickles from images.
 
